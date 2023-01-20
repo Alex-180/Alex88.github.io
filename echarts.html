@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./echarts.css" rel="stylesheet" />
+    <title>Document</title>
+</head>
+<body>
+  
+    <main>
+      <div class="container blue-bubble">
+    
+       
+         
+        </div>
+       
+     </div> 
+        <section>
+
+
+          <div class="container blue-bubble5">
+
+          
+            <div class="textegraphe0">
+          <p>
+            Le nombres d'incendies peut varier en fonction du mois de l'année à cause des canicules notamment l'été.<br>
+
+            C'est pour cela que sur l'année 2020, nous avons étudié le nombres de d'incendie qu'il y a eu chaque mois dans plusieurs régions de France.<br>
+
+            En effet, nous pouvons remarquer que sur les mois les plus chaud Juillet et Août, le nombres de feux est beaucoup plus élevé que les autres mois de l'année.<br>
+
+            Nous pouvons également remarquer que le mois où le nombres d'incendies est au plus bas, est un mois d'hiver Décembre.
+            
+          </p>
+          <div id="chart1" style="width :100%; height:400px"></div>
+          </div> 
+        </div>
+      </div>
+
+      <div class="container blue-bubble4">
+        <div id="chart5" style="width:100%; height:400px">
+        </div>
+      <div class="textegraphe3">
+        <br>
+<br>
+<br>
+        <p>
+          Désormais, nous allons comparer le nombres de feux chaque mois mais sur 3 années différentes, 2017, 2018 et 2019.<br>
+          
+          Nous pouvons voir que le nombre de feux se ressemble chaque mois de chaque années. Pour chaque années, le nombres de feux élevé pour les mêmes mois.<br>
+
+          
+
+        </p>
+      </div>
+      </div>
+    </div>
+
+          <div class="container blue-bubble3">
+          <div class="textegraphe2">
+            <p>
+              Pour en savoir plus sur les incendies présent dans certaines régions de France, nous avons décidés de regarder dans 4 régions, le nombres de feux en fonction des habitants sur l'année 2019.<br>
+              
+              Il y a tout d'abord, les Aples Haute Provence avec 161 980 habitants, le Gard avec 745 756 habitants, l'Ardèche avec 327 011 habitants et le Drome avec 517 414 habitants.
+
+              Nous pouvons voir que le nombres d'habitants n'influence pas forcément le nombres de feux, le Drome qui est en 2ème position en nombres d'habitants est celui qui a eu le moins d'incendie.
+
+            </p>
+            
+          <div id="chart4" style="width:100%; height:400px">
+          </div>
+          </div>
+          </div>
+
+
+     
+      
+        <div class="container blue-bubble2">
+          <div class="textegraphe1">
+            <p>
+              En Corse, nous avons voulus analyser le nombres de feux en Corse du Sud et Haute-Corse.<br>
+              
+              Pour cela nous avons regarder le nombre de feux, et nous pouvons apercevoir de les nombre sont quasiment identique.<br>
+
+              Il y a 308 feux en Corse du Sud et 320 feux en Haute-Corse pour un total de 49% à 51%.
+
+              Sachant qu'il y a en Corse du Sud environ 158 800 habitants et en Haute Corse environ 180 378 habitants, on peut remarquer que le nombre d'habitants n'influence pas le nombre d'incendies.
+
+            </p>
+            
+          <div id="chart3" style="width:100%; height:400px">
+          </div>
+          </div>
+          </div>
+      
+               
+            
+            
+    
+
+
+        </section>
+    </main>    
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.js"></script>
+    <script>
+        fetch('incendie.json')
+    .then((response) => response.json())
+    .then((json) => {
+      
+    const groupByMonth = json.reduce((acc, current) => {
+      const mois = current["Alerte"].substring(3,8)
+      if (!acc[mois]) {
+        acc[mois] = []
+      }
+
+      acc[mois].push(current)
+
+      return acc
+    }, {})
+
+      // Initialize the echarts instance based on the prepared dom
+    const myChart = echarts.init(document.querySelector('#chart1'));
+
+    
+// Specify the configuration items and data for the chart
+const option = {
+title: {
+  text: 'Incendies par mois en 2020'
+},
+tooltip: {},
+legend: {
+  data: ['Mois']
+},
+xAxis: {
+  name: "Nombre",
+  data: Object.keys(groupByMonth), // Reécupère les clef d'un objets
+
+},
+yAxis: {},
+series: [
+  {
+    name: 'Incendies',
+    type: 'bar',
+    data: Object.values(groupByMonth).map((tableauDincdendies) => tableauDincdendies.length)
+  }
+]
+};
+
+// Display the chart using the configuration items and data just specified.
+myChart.setOption(option);
+
+//GRAPH 3 Ciruclaire feux en Corse
+const graphiqueCercle = echarts.init(document.querySelector('#chart3'));
+
+         optionLine2 = {
+
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    top: '5%',
+    left: 'center'
+  },
+  series: [
+    {
+      name: 'Incendie en Corse de 2020 à 2021 :',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: {
+        show: false,
+        position: 'center'
+      },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: 40,
+          fontWeight: 'bold'
+        }
+      },
+      labelLine: {
+        show: false
+      },
+      data: [
+        { value: 320, name: 'Haute-Corse 51%' },
+        { value: 308, name: 'Corse du Sud 49%' },
+      ]
+    }
+  ]
+};
+        graphiqueCercle.setOption(optionLine2);
+        //GRAPH 3 Circulaire feux en Corse
+
+// GRAPHE 4
+const graphiqueCercle2 = echarts.init(document.querySelector('#chart4'));
+
+optionCercleN2 = {
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    top: '5%',
+    left: 'center'
+  },
+  series: [
+    {
+      name: 'Incendie par rapport aux nombre de personnes',
+      type: 'pie',
+      radius: ['25%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: {
+        show: false,
+        position: 'center'
+      },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: 40,
+          fontWeight: 'bold'
+        }
+      },
+      labelLine: {
+        show: false
+      },
+      data: [
+        { value: 84, name: 'Alpes Haute Provence' },
+        { value: 102, name: 'Gard' },
+        { value: 108, name: 'Ardèche' },
+        { value: 49, name: 'Drome' },
+      ]
+    }
+  ]
+};
+graphiqueCercle2.setOption(optionCercleN2);
+
+//GRAPHE 5
+const graphiqueLigneCouleur = echarts.init(document.querySelector('#chart5'));
+
+optionLigneC = {
+  title: {
+    text: 'Incendies par mois sur les années 2018/2019/2021 :'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+
+  xAxis: {
+    type: 'category',
+    boundaryGap: false,
+    data: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet','Août','Septembre','Octobre','Novembre','Décembre']
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [
+
+  {
+      name: '2017',
+      type: 'line',
+
+      data: [93, 72, 193, 136, 115, 224, 444, 395, 246, 271, 152, 52]
+    },
+
+  {
+      name: '2018',
+      type: 'line',
+
+      data: [49, 53, 52, 99, 21, 59, 226, 238, 165, 93, 7, 19]
+    },
+
+
+    {
+      name: '2019',
+      type: 'line',
+    
+      data: [69, 142, 214, 46, 89, 161, 356, 358, 268, 68, 7, 13]
+    }
+
+  ]
+};
+
+graphiqueLigneCouleur.setOption(optionLigneC);
+// GRAPHE 5
+
+    });
+
+   
+      
+    </script>
+</body>
+</html>
